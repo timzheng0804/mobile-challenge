@@ -2,7 +2,9 @@ package github.timzheng0804.a500px;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.LruCache;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
@@ -11,38 +13,44 @@ import com.android.volley.toolbox.Volley;
  * Created by Tim on 27/09/2017.
  */
 
-public class PhotoVolley {
-    private static PhotoVolley mInstance = null;
+class VolleySingleton {
+    private static VolleySingleton mInstance = null;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
-    public static PhotoVolley getInstance(Context context) {
+    public static synchronized VolleySingleton getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new PhotoVolley(context);
+            mInstance = new VolleySingleton(context);
         }
         return mInstance;
     }
 
-    private PhotoVolley(Context context) {
+    private VolleySingleton(Context context) {
         mRequestQueue = Volley.newRequestQueue(context);
         mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+            private final LruCache<String, Bitmap>
+                    cache = new LruCache<String, Bitmap>(50);
             @Override
             public Bitmap getBitmap(String url) {
-                return null;
+                return cache.get(url);
             }
 
             @Override
             public void putBitmap(String url, Bitmap bitmap) {
-                return;
+                cache.put(url, bitmap);
             }
         });
     }
 
-    public RequestQueue getmRequestQueue() {
+    public <T> void addToRequestQueue(Request<T> req) {
+        getRequestQueue().add(req);
+    }
+
+    public RequestQueue getRequestQueue() {
         return mRequestQueue;
     }
 
-    public ImageLoader getmImageLoader() {
+    public ImageLoader getImageLoader() {
         return mImageLoader;
     }
 }
