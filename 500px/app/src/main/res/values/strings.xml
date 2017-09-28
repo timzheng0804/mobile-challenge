@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">500px</string>
+    <string name="RequestUrl">https://api.500px.com/v1/photos?feature=popular</string>
+    <string name="page">&amp;page=</string>
+    <string name="ConsumerKey">&amp;consumer_key=gYESWlGgc4yjuPk0blJKgW9q3vRw4Vsy3tBsaTZM</string>
+    <string name="Photo_Size">&amp;image_size=21</string>
 </resources>
