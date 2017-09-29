@@ -7,8 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.volley.toolbox.NetworkImageView;
-import com.google.android.flexbox.AlignSelf;
-import com.google.android.flexbox.FlexboxLayoutManager;
+import com.fivehundredpx.greedolayout.GreedoLayoutSizeCalculator;
 
 import java.util.ArrayList;
 
@@ -16,14 +15,13 @@ import java.util.ArrayList;
  * Created by Tim on 27/09/2017.
  */
 
-public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
+public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder>
+        implements GreedoLayoutSizeCalculator.SizeCalculatorDelegate, AdapterNotify {
 
-    Context mContext;
-    ArrayList<Photograph> photographs;
+    private Context mContext;
 
-    public PhotoAdapter(Context context, ArrayList<Photograph> photographs) {
+    public PhotoAdapter(Context context) {
         this.mContext = context;
-        this.photographs = photographs;
     }
 
     @Override
@@ -34,7 +32,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         return new ViewHolder(v);
     }
 
-
     /**
      * When View being bind, load photo into networkimageview.
      * @param holder current recyclerview holder
@@ -42,14 +39,30 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String url = photographs.get(position).getPhotographUrl();
+        Photograph photograph = Photograph.getItemFromList(position);
+        if (photograph == null) return;
+        String url = photograph.getPhotographUrl();
         holder.setPhotoUrl(url);
+        holder.setPhotoViewOnClick(position);
     }
 
     @Override
     public int getItemCount() {
-        return photographs.size();
+        return Photograph.getListSize();
     }
+
+    /**
+     * Set Aspect Ratio of Image
+     * @param i index of the image
+     * @return
+     */
+    @Override
+    public double aspectRatioForIndex(int i) {
+        if (i >= getItemCount()) return 1;
+        Photograph photograph = Photograph.getItemFromList(i);
+        return (double) photograph.getWidth() / (double) photograph.getHeight();
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -62,6 +75,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
             volleySingleton = VolleySingleton.getInstance(mContext);
         }
 
+        private void setPhotoViewOnClick(final int index) {
+            photoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FullScreenPhotograph.startActivity(mContext, index);
+                }
+            });
+        }
+
         /**Load url into NetworkImage View
          *
          * @param url url of the photo
@@ -69,13 +91,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         public void setPhotoUrl(String url) {
             photoView.setImageUrl(url, VolleySingleton.getInstance(mContext).getImageLoader());
 
-            ViewGroup.LayoutParams lp = photoView.getLayoutParams();
-
-            if (lp instanceof FlexboxLayoutManager.LayoutParams) {
-                FlexboxLayoutManager.LayoutParams flexboxLp = (FlexboxLayoutManager.LayoutParams)lp;
-                flexboxLp.setFlexGrow(1.0f);
-                flexboxLp.setAlignSelf(AlignSelf.STRETCH);
-            }
         }
     }
+
+
 }
