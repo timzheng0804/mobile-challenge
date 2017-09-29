@@ -2,14 +2,12 @@ package github.timzheng0804.a500px;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.google.android.flexbox.AlignSelf;
-import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.FlexboxLayoutManager;
 
 import java.util.ArrayList;
@@ -78,7 +76,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
                 flexboxLp.setFlexGrow(1.0f);
                 flexboxLp.setAlignSelf(AlignSelf.STRETCH);
             }
-
         }
     }
 }

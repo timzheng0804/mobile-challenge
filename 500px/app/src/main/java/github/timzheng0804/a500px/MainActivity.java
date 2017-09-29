@@ -7,16 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
-
 import com.android.volley.Cache;
 import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexDirection;
@@ -50,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize RecyclerView
         photoRView = (RecyclerView) findViewById(R.id.photoRView);
+
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(this);
         layoutManager.setFlexDirection(FlexDirection.ROW);
         layoutManager.setFlexWrap(wrap);
@@ -88,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void makeJsonRequest() {
         url = getString(R.string.RequestUrl)
                 + getString(R.string.page)
