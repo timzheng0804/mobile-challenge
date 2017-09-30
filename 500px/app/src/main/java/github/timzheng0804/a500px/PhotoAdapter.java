@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import com.android.volley.toolbox.NetworkImageView;
 import com.fivehundredpx.greedolayout.GreedoLayoutSizeCalculator;
 
+import github.timzheng0804.a500px.Modle.AdapterNotify;
+import github.timzheng0804.a500px.Modle.Photograph;
+import github.timzheng0804.a500px.Modle.VolleySingleton;
+
 /**
  * Created by Tim on 27/09/2017.
  */
@@ -52,7 +56,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder>
     /**
      * Set Aspect Ratio of Image
      * @param i index of the image
-     * @return
+     * @return Aspect ratio
      */
     @Override
     public double aspectRatioForIndex(int i) {
@@ -72,11 +76,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder>
             volleySingleton = VolleySingleton.getInstance(mContext);
         }
 
+        /**
+         * Set onclick listener to start fullscreen activity for every item
+         * @param index index of the item
+         */
         private void setPhotoViewOnClick(final int index) {
             photoView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FullScreenPhotograph.startActivity(mContext, index);
+                    FullScreenActivity.startActivity(mContext, index);
                 }
             });
         }
@@ -87,7 +95,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder>
          */
         public void setPhotoUrl(String url) {
             photoView.setImageUrl(url, VolleySingleton.getInstance(mContext).getImageLoader());
-
         }
     }
 

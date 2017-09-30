@@ -1,6 +1,5 @@
-package github.timzheng0804.a500px;
+package github.timzheng0804.a500px.Modle;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**

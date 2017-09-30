@@ -10,6 +10,9 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import github.timzheng0804.a500px.Modle.AdapterNotify;
+import github.timzheng0804.a500px.Modle.Photograph;
+import github.timzheng0804.a500px.Modle.VolleySingleton;
 
 
 /**
@@ -18,7 +21,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PagerAdapter extends android.support.v4.view.PagerAdapter implements AdapterNotify {
 
-    Context mContext;
+    private Context mContext;
 
     public PagerAdapter(Context context) {
         this.mContext = context;
@@ -48,8 +51,7 @@ public class PagerAdapter extends android.support.v4.view.PagerAdapter implement
         authorName.setText(photograph.getAuthor());
         numLikes.setText(numPeopleLiked);
 
-        // Set Action Bar to Photo name
-
+        // Add view to Viewpager
         container.addView(v);
 
         return v;
@@ -62,6 +64,7 @@ public class PagerAdapter extends android.support.v4.view.PagerAdapter implement
 
     @Override
     public int getCount() {
+
         return Photograph.getListSize();
     }
 
@@ -69,6 +72,5 @@ public class PagerAdapter extends android.support.v4.view.PagerAdapter implement
     public boolean isViewFromObject(View view, Object object) {
         return view == object;
     }
-
 
 }

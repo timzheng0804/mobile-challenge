@@ -1,16 +1,18 @@
-package github.timzheng0804.a500px;
+package github.timzheng0804.a500px.Modle;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.LruCache;
-import android.widget.Adapter;
 
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -19,17 +21,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import github.timzheng0804.a500px.R;
+
 /**
  * Created by Tim on 27/09/2017.
  */
 
-class VolleySingleton {
+public class VolleySingleton {
     private static VolleySingleton mInstance = null;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
     private boolean loading;
     private int pageNumber;
 
+    /**
+     * Singleton design pattern
+     * @param context context of Activity
+     * @return
+     */
 
     public static synchronized VolleySingleton getInstance(Context context) {
         if (mInstance == null) {
@@ -41,7 +50,7 @@ class VolleySingleton {
     private VolleySingleton(Context context) {
         mRequestQueue = Volley.newRequestQueue(context);
         mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
-            private final LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(50);
+            private final LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(100);
             @Override
             public Bitmap getBitmap(String url) {
                 return cache.get(url);
@@ -68,8 +77,15 @@ class VolleySingleton {
         return mImageLoader;
     }
 
+
+    /**
+     * Make Json Requst to 500px Api for 1 page of photos
+     * @param context the activity context
+     * @param adapter the adapter being used to process photos
+     */
+
     public void makeJsonRequest(Context context, final AdapterNotify adapter) {
-        if (loading) return;
+        if (loading) return;  // if still loading, do not load next page
         loading = true;
 
         String url = context.getString(R.string.RequestUrl)
@@ -77,6 +93,7 @@ class VolleySingleton {
                     + pageNumber
                     + context.getString(R.string.ConsumerKey)
                     + context.getString(R.string.Photo_Size);
+
         addToRequestQueue(
                 new JsonObjectRequest(Request.Method.GET, url, null,
                         new Response.Listener<JSONObject>() {
@@ -115,7 +132,7 @@ class VolleySingleton {
                         // Handle Error
                     }
                 }));
-        ++pageNumber;
         loading = false;
+        ++pageNumber;
     }
 }
