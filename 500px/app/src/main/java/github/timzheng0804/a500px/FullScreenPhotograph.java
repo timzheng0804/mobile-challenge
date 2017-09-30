@@ -1,13 +1,14 @@
 package github.timzheng0804.a500px;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-
-import java.util.ArrayList;
 
 /**
  * Created by Tim on 29/09/2017.
@@ -25,10 +26,10 @@ public class FullScreenPhotograph extends AppCompatActivity {
      * @param index the index of the item being clicked
      */
 
-    public static void startActivity(Context context, int index) {
+    public static Intent startActivity(Context context, int index) {
         Intent intent = new Intent(context, FullScreenPhotograph.class);
         intent.putExtra(context.getString(R.string.index), index);
-        context.startActivity(intent);
+        return intent;
     }
 
     @Override
@@ -48,13 +49,18 @@ public class FullScreenPhotograph extends AppCompatActivity {
             viewPager.setCurrentItem(curIndex);
         }
 
+        setViewPagerOnPageChangeListener();
+
     }
 
-    void helper() {
+    void setViewPagerOnPageChangeListener() {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                Photograph photograph = Photograph.getItemFromList(position);
+                android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+                if (photograph == null || actionBar == null) return;
+                actionBar.setTitle(photograph.getPhotographName());
             }
 
             @Override

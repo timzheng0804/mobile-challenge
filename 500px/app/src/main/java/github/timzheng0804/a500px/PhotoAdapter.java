@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import com.android.volley.toolbox.NetworkImageView;
 import com.fivehundredpx.greedolayout.GreedoLayoutSizeCalculator;
 
-import java.util.ArrayList;
-
 /**
  * Created by Tim on 27/09/2017.
  */
@@ -58,11 +56,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder>
      */
     @Override
     public double aspectRatioForIndex(int i) {
-        if (i >= getItemCount()) return 1;
         Photograph photograph = Photograph.getItemFromList(i);
+        if(photograph == null) return 0;
         return (double) photograph.getWidth() / (double) photograph.getHeight();
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

@@ -9,6 +9,7 @@ import com.fivehundredpx.greedolayout.GreedoSpacingItemDecoration;
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView photoRView;
+    static final int SLIDE_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-
                 if (!recyclerView.canScrollVertically(1)) {
                     VolleySingleton.getInstance(getApplicationContext())
                             .makeJsonRequest(getApplicationContext(),
